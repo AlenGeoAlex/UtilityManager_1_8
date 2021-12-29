@@ -14,7 +14,7 @@ import java.util.Optional;
 public abstract class Configuration {
 
     private final UtilityManager utilityManager;
-    private FlatFile yamlFile;
+    protected FlatFile yamlFile;
 
     public Configuration(UtilityManager utilityManager) {
         this.utilityManager = utilityManager;
