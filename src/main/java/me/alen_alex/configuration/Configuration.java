@@ -2,7 +2,6 @@ package me.alen_alex.configuration;
 
 import de.leonhard.storage.internal.FlatFile;
 import me.alen_alex.UtilityManager;
-import org.apache.commons.lang3.StringUtils;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.jetbrains.annotations.NotNull;
@@ -33,7 +32,7 @@ public abstract class Configuration {
      * @return String a Colorized String
      */
     public String fetchStringMessage(@NotNull String configPath){
-        return utilityManager.getChatUtils().colorize(yamlFile.getString(configPath));
+        return utilityManager.getMessageUtils().colorize(yamlFile.getString(configPath));
     }
 
     /**
@@ -44,7 +43,7 @@ public abstract class Configuration {
     public List<String> fetchListMessage(@NotNull String configPath){
         List<String> stringList = new ArrayList<>();
         yamlFile.getStringList(configPath).forEach(s -> {
-            stringList.add(utilityManager.getChatUtils().colorize(s));
+            stringList.add(utilityManager.getMessageUtils().colorize(s));
         });
         return stringList;
     }
