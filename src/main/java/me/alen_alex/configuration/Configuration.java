@@ -21,47 +21,6 @@ public abstract class Configuration {
     }
 
     /**
-     * Creates a file
-     * @param isConfig boolean is the file a config file.
-     * @param fileName name of the file that would be used to create
-     * @param isResourceName name of the resource that needed to be fetched. Can be NULL
-     * @return boolean if the file has been properly created
-     * @see de.leonhard.storage.Config
-     */
-    public boolean initFiles(boolean isConfig, @NotNull String fileName , String isResourceName){
-        if(isConfig)
-            this.yamlFile = utilityManager.getFileUtils().createConfiguration();
-        else {
-            if(StringUtils.isBlank(isResourceName))
-                this.yamlFile = utilityManager.getFileUtils().createYAMLFile(fileName);
-            else this.yamlFile = utilityManager.getFileUtils().createYAMLFileByInputStream(isResourceName,fileName);
-        }
-
-        return yamlFile != null;
-    }
-
-    /**
-     * Creates a file
-     * @param isConfig boolean is the file a config file.
-     * @param fileName name of the file that would be used to create
-     * @param folderName name of the folder under which the file needed to be created
-     * @param isResourceName name of the resource that needed to be fetched. Can be NULL
-     * @return boolean if the file has been properly created
-     * @see de.leonhard.storage.Config
-     */
-    public boolean initFiles(boolean isConfig, @NotNull String fileName, String folderName, String isResourceName){
-        if(isConfig)
-            this.yamlFile = utilityManager.getFileUtils().createConfiguration();
-        else {
-            if(StringUtils.isBlank(isResourceName))
-                this.yamlFile = utilityManager.getFileUtils().createYAMLFile(fileName);
-            else this.yamlFile = utilityManager.getFileUtils().createYAMLFileByInputStream(isResourceName,fileName,folderName);
-        }
-
-        return yamlFile != null;
-    }
-
-    /**
      * Clears the loaded file data
      */
     public void clearConfigData(){
@@ -122,15 +81,23 @@ public abstract class Configuration {
     }
 
     /**
-     * Reloads the entire loaded data using {@link Configuration#loadConfig()}.
-     * @return long Time taken to complete the reloading process
+     * Reloads the entire loaded data using {@link Configuration#loadConfig()}. This will check for {@link Configuration#initConfig()}
+     * @return long Time taken to complete the reloading process. It will return 0 if {@link Configuration#initConfig()} fails
      */
     public long reloadFile(){
         long start = System.currentTimeMillis();
+        if(!initConfig())
+            return 0;
         loadConfig();
         long end = System.currentTimeMillis();
         return ((end-start));
     }
+
+    /**
+     * Create necessary files and check for file updation if requires
+     * @return boolean if the file is generated successfully
+     */
+    public abstract boolean initConfig();
 
     /**
      * Load all the necessary information from the config into the plugins cache
